@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#065f46" />
+  <meta name="description" content="Generate QR codes from text or URLs in your browser. Nothing uploaded." />
+  <title>QRStamp — generate QR codes in-browser</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <h1>QRStamp</h1>
+      <p class="sub">Type text or a URL. Get a live QR code you can download as PNG or SVG. Everything stays in your browser.</p>
+    </header>
+
+    <section class="card">
+      <label class="lbl" for="input">Text / URL</label>
+      <textarea id="input" rows="4" spellcheck="false" autocomplete="off" placeholder="https://example.com or any text"></textarea>
+      <div class="toolbar">
+        <button type="button" class="ghost" id="sampleBtn">Sample</button>
+        <button type="button" class="ghost" id="clearBtn">Clear</button>
+      </div>
+    </section>
+
+    <section class="card controls">
+      <div class="ctrl">
+        <label class="lbl" for="size">Size <span id="sizeLabel">256</span>px</label>
+        <input type="range" id="size" min="128" max="512" step="16" value="256" />
+      </div>
+      <div class="ctrl">
+        <label class="lbl" for="ecc">Error correction</label>
+        <select id="ecc">
+          <option value="L">L — ~7% recovery</option>
+          <option value="M" selected>M — ~15% recovery</option>
+          <option value="Q">Q — ~25% recovery</option>
+          <option value="H">H — ~30% recovery</option>
+        </select>
+      </div>
+      <div class="ctrl">
+        <label class="lbl" for="margin">Quiet zone <span id="marginLabel">2</span></label>
+        <input type="range" id="margin" min="0" max="8" step="1" value="2" />
+      </div>
+    </section>
+
+    <section class="card preview-card">
+      <div class="preview-wrap" id="previewWrap">
+        <div id="preview" class="preview" aria-live="polite"></div>
+        <p class="empty" id="emptyHint">Enter text above to generate a QR code.</p>
+      </div>
+      <div class="status" id="status" aria-live="polite" hidden></div>
+      <div class="toolbar download-bar">
+        <button type="button" class="primary" id="pngBtn" disabled>Download PNG</button>
+        <button type="button" class="primary" id="svgBtn" disabled>Download SVG</button>
+        <button type="button" class="ghost" id="copyBtn" disabled>Copy image</button>
+      </div>
+    </section>
+
+    <details class="card">
+      <summary>How it works</summary>
+      <p>
+        QR codes are generated entirely in your browser with
+        <a href="https://github.com/kazuhikoarase/qrcode-generator" rel="noopener">qrcode-generator</a>
+        (vendored). Higher error-correction levels make denser codes that survive more damage or logo overlays.
+        Nothing is sent to a server.
+      </p>
+    </details>
+  </main>
+  <footer>
+    Free &amp; open source · <a href="https://github.com/shaikbasha1437/qrstamp">GitHub</a>
+  </footer>
+  <div class="toast" id="toast" hidden>Copied</div>
+  <script src="qrcode.min.js"></script>
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
+  </script>
+</body>
+</html>
